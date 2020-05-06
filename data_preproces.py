@@ -107,5 +107,6 @@ if __name__ == '__main__':
     x,y, img_paths = gen_x_y(paths[:5])
     x_train = np.squeeze(x, axis=1)
     y_train = np.squeeze(y, axis=1)
+    y_train = np.expand_dims(y_train,axis=-1)
     print(x_train.shape)
     print(y_train.shape)

@@ -30,9 +30,11 @@ def make_txt(jpg_img_dir, filename, limit=1000):
     file.close()
 
 
-def load_img(path):
+def load_img(path, resizedata =True):
     print("path is ", path)
     img = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
+    if resizedata:
+        img = cv2.resize(img, (int(img.shape[1] / 3), int(img.shape[0] / 3)), interpolation=cv2.INTER_CUBIC)
     img = img / 255.0
     img[:, :, 0] = (img[:, :, 0] - 0.485) / 0.229
     img[:, :, 1] = (img[:, :, 1] - 0.456) / 0.224
@@ -43,9 +45,11 @@ def load_img(path):
     return img.astype(np.float32)
 
 
-def img_from_h5(path):
+def img_from_h5(path, resizedata=True):
     gt_file = h5py.File(path, 'r')
     density_map = np.asarray(gt_file['density'])
+    if resizedata:
+        density_map = cv2.resize(density_map, (int(density_map.shape[1] / 3), int(density_map.shape[0] / 3)), interpolation=cv2.INTER_CUBIC) * 9
     stride = 1
     if stride > 1:
         density_map_stride = np.zeros((np.asarray(density_map.shape).astype(int) // stride).tolist(), dtype=np.float32)
