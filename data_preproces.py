@@ -1,10 +1,8 @@
 import os
 import random
-
-import cv2
 import scipy
-
 from utility import *
+
 
 def read_txt(txt_file, limit=1000):
     with open(txt_file) as f:
@@ -91,22 +89,15 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
         if 'flip' in augmentation_methods and train_val_test == 'train':
             x.append(np.expand_dims(cv2.flip(x_, 1), axis=0))
             y.append(np.expand_dims(np.expand_dims(cv2.flip(y_, 1), axis=0), axis=-1))
-    if train_val_test == 'train':
-        random_num = random.randint(7, 77)
-        random.seed(random_num)
-        random.shuffle(x)
-        random.seed(random_num)
-        random.shuffle(y)
-        random.seed(random_num)
-        random.shuffle(img_paths)
+
+    x = np.squeeze(x, axis=1)
+    y = np.squeeze(y, axis=1)
+    y = np.expand_dims(y, axis=-1)
     return x, y, img_paths
 
 
 if __name__ == '__main__':
     paths = read_txt('data/testing.txt')
-    x,y, img_paths = gen_x_y(paths[:5])
-    x_train = np.squeeze(x, axis=1)
-    y_train = np.squeeze(y, axis=1)
-    y_train = np.expand_dims(y_train,axis=-1)
+    x_train,y_train, img_paths = gen_x_y(paths[:5])
     print(x_train.shape)
     print(y_train.shape)
