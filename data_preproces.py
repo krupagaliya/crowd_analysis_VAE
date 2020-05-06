@@ -91,9 +91,9 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
             y.append(np.expand_dims(np.expand_dims(cv2.flip(y_, 1), axis=0), axis=-1))
 
     print(len(x), len(y))
-    cv2.imshow(img_paths[0].split('/')[-1], np.squeeze(x[1], axis=0))
-    cv2.imshow(img_paths[0].split('/')[-1] + "org", np.squeeze(x[0], axis=0))
-    cv2.waitKey(100000)
+    # cv2.imshow(img_paths[0].split('/')[-1], np.squeeze(x[1], axis=0))
+    # cv2.imshow(img_paths[0].split('/')[-1] + "org", np.squeeze(x[0], axis=0))
+    # cv2.waitKey(100000)
     x = np.squeeze(x, axis=1)
     y = np.squeeze(y, axis=1)
     y = np.expand_dims(y, axis=-1)
