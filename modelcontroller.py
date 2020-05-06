@@ -87,3 +87,9 @@ def vae(input_shape):
     outputs = decoder(encoder(inputs)[2])
     vae = Model(inputs, outputs, name='vae')
     return vae, encoder, decoder
+
+
+if __name__ == '__main__':
+
+    vae, encoder, decoder = vae(input_shape)
+

@@ -91,9 +91,10 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
             y.append(np.expand_dims(np.expand_dims(cv2.flip(y_, 1), axis=0), axis=-1))
 
     print(len(x), len(y))
-   
+
     x = np.squeeze(x, axis=1)
     y = np.squeeze(y, axis=1)
+    x = np.expand_dims(x, axis=-1)
     y = np.expand_dims(y, axis=-1)
     return x, y, img_paths
 
