@@ -83,8 +83,8 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
         x_ = load_img(i)
         y_ = img_from_h5(i.replace('.jpg', '.h5').replace('images', 'ground'))
         x_, y_ = fix_singular_shape(x_), fix_singular_shape(y_)
-        print("x_.shape",x_.shape)
-        print("y_.shape",y_.shape)
+        # print("x_.shape",x_.shape)
+        # print("y_.shape",y_.shape)
         if 'ori' in augmentation_methods:
             x.append(np.expand_dims(x_, axis=0))
             y.append(np.expand_dims(np.expand_dims(y_, axis=0), axis=-1))

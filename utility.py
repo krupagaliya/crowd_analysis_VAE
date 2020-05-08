@@ -23,7 +23,22 @@ def get_logger(name):
     return logger
 
 
+def check_io_fromset(ground, h5file):
+    ground = ground * 255.
+    img = ground
+    cv2_imshow(img)
+    print("real img", img.shape)
+    print(np.sum(h5file))
+    plt.imshow(np.squeeze(h5file, axis=-1), cmap=CM.jet)
+
 def check_dataCorrectiness(x_train, y_train, img_paths):
+    """
+    If it is for train dataset than put len(img_paths)*2 as max limit
+    :param x_train: x data
+    :param y_train: y data
+    :param img_paths: img_paths list
+    :return: None
+    """
     count = 0
     randcount = random.randint(1, len(img_paths))
     print(randcount)
