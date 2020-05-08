@@ -69,7 +69,7 @@ class ModelController:
             os.mkdir('model')
 
         plot_model(encoder, to_file='model/{}.png'.format(model_name), show_shapes=True)
-        return inputs, shape, encoder
+        return inputs, shape, encoder, z_mean, z_log_var
 
     def decoder_model(self, shape):
         latent_inputs = Input(shape=(self.latent_dim,), name='z_sampling')
