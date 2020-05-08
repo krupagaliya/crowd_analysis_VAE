@@ -19,7 +19,6 @@ def get_logger(name):
     logger.setLevel(logging.DEBUG)
     return logger
 
-
 def make_txt(jpg_img_dir, filename, limit=1000):
     file = open(filename, 'w')
     for j, i in enumerate(os.listdir(jpg_img_dir)):
