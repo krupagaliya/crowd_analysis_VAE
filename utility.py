@@ -1,10 +1,13 @@
 import os
+import random
 from os.path import expanduser
 
 import cv2
 import numpy as np
 import h5py
-
+from google.colab.patches import cv2_imshow
+from matplotlib import pyplot as plt
+from matplotlib import cm as CM
 
 def get_logger(name):
     import logging
@@ -18,6 +21,23 @@ def get_logger(name):
 
     logger.setLevel(logging.DEBUG)
     return logger
+
+
+def check_dataCorrectiness(x_train, y_train, img_paths):
+    count = 0
+    randcount = random.randint(1, len(img_paths))
+    print(randcount)
+    for i, j in zip(x_train, y_train):
+        if count == randcount:
+            i255 = i * 255.
+            cv2_imshow(i255)
+
+            j = np.squeeze(j, axis=-1)
+            print("Count:", np.sum(j))
+            plt.imshow(j, cmap=CM.jet)
+
+        count += 1
+
 
 def make_txt(jpg_img_dir, filename, limit=1000):
     file = open(filename, 'w')
