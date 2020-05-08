@@ -65,7 +65,6 @@ def make_txt(jpg_img_dir, filename, limit=1000):
 
 
 def load_img(path, resizedata =True):
-    print("path is ", path)
     img = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
     if resizedata:
         img = cv2.resize(img, (int(img.shape[1] / 3), int(img.shape[0] / 3)), interpolation=cv2.INTER_CUBIC)
@@ -76,7 +75,7 @@ def load_img(path, resizedata =True):
     # img[:, :, 0]=(img[:, :, 0] - 0.5) / 1
     # img[:, :, 1]=(img[:, :, 1] - 0.5) / 1
     # img[:, :, 2]=(img[:, :, 2] - 0.5) / 1
-    print(img.shape)
+    
     return img.astype(np.float32)
 
 
