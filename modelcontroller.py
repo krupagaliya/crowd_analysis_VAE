@@ -8,13 +8,13 @@ from keras.losses import mse
 from keras.utils import plot_model
 from keras import backend as K
 from datetime import datetime
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("-ld", "--latent_dim", type=int)
-parser.add_argument("-f", "--filters", type=int)
-parser.add_argument("-k", "--kernel", type=int)
-parser.add_argument("-ad", "--above_dense", type=int)
-args = parser.parse_args()
+# import argparse
+# parser = argparse.ArgumentParser()
+# parser.add_argument("-ld", "--latent_dim", type=int)
+# parser.add_argument("-f", "--filters", type=int)
+# parser.add_argument("-k", "--kernel", type=int)
+# parser.add_argument("-ad", "--above_dense", type=int)
+# args = parser.parse_args()
 
 # latent_dim = args.latent_dim
 # filters = args.filters
