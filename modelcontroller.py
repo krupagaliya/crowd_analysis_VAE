@@ -1,7 +1,7 @@
 import os
 import logging
 from keras.layers import Dense, Input
-from keras.layers import Conv2D, Flatten, Lambda
+from keras.layers import Conv2D, Flatten, Lambda, Dropout
 from keras.layers import Reshape, Conv2DTranspose
 from keras.models import Model
 from keras.losses import mse
@@ -50,6 +50,7 @@ class ModelController:
                        activation='relu',
                        strides=2,
                        padding='same')(x)
+            x = Dropout(.2)
 
         # shape info needed to build decoder model
         shape = K.int_shape(x)
@@ -62,7 +63,7 @@ class ModelController:
 
         # instantiate encoder model
         # encoder = Model(inputs, [z_mean, z_log_var, z], name='encoder')
-        encoder = Model(inputs, z_mean, name='encoder')
+        encoder = Model(inputs, z, name='encoder')
         now = datetime.now()
         model_name  = str(now.day) + str(now.strftime("%X")) + 'enc'
         if not os.path.exists('model'):
