@@ -2,6 +2,7 @@ import os
 import random
 import scipy
 from utility import *
+import progressbar
 
 
 def read_txt(txt_file, limit=1000):
@@ -78,9 +79,12 @@ def get_density_map_gaussian(im, points, adaptive_mode=False, fixed_value=15, fi
 
 
 def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
+    bar = progressbar.ProgressBar(max_value=len(img_paths))
+    bar.start()
     x, y = [], []
     for i in img_paths:
         x_ = load_img(i)
+
         y_ = img_from_h5(i.replace('.jpg', '.h5').replace('images', 'ground'))
         x_, y_ = fix_singular_shape(x_), fix_singular_shape(y_)
         # print("x_.shape",x_.shape)
@@ -91,18 +95,18 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
         if 'flip' in augmentation_methods and train_val_test == 'train':
             x.append(np.expand_dims(cv2.flip(x_, 1), axis=0))
             y.append(np.expand_dims(np.expand_dims(cv2.flip(y_, 1), axis=0), axis=-1))
-
+        bar.update(img_paths.index(i))
     print(len(x), len(y))
 
     x = np.squeeze(x, axis=1)
     y = np.squeeze(y, axis=1)
     x = np.expand_dims(x, axis=-1)
-
+    bar.finish()
     return x, y, img_paths
 
 
 if __name__ == '__main__':
     paths = read_txt('data/testing.txt')
-    x_train,y_train, img_paths = gen_x_y(paths[:5], augmentation_methods=['flip', 'ori'])
+    x_train,y_train, img_paths = gen_x_y(paths, augmentation_methods=['flip', 'ori'])
     print(x_train.shape)
     print(y_train.shape)

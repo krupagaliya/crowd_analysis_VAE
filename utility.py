@@ -59,7 +59,7 @@ def make_txt(jpg_img_dir, filename, limit=1000):
     for j, i in enumerate(os.listdir(jpg_img_dir)):
         if i.endswith('jpg'):
             file.write(os.path.join(jpg_img_dir, i) + '\n')
-        if j > limit:
+        if j >= limit-1:
             break
     file.close()
 
