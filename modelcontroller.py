@@ -50,7 +50,7 @@ class ModelController:
                        activation='relu',
                        strides=2,
                        padding='same')(x)
-            x = Dropout(.2)
+            # x = Dropout(.2)
 
         # shape info needed to build decoder model
         shape = K.int_shape(x)
@@ -70,6 +70,8 @@ class ModelController:
             os.mkdir('model')
 
         plot_model(encoder, to_file='model/{}.png'.format(model_name), show_shapes=True)
+        # print(encoder.summary())
+        # print("---------------------------"*10)
         return inputs, shape, encoder, z_mean, z_log_var
 
     def decoder_model(self, shape):
@@ -96,15 +98,28 @@ class ModelController:
         decoder = Model(latent_inputs, outputs, name='decoder')
         now = datetime.now()
         model_name = str(now.day) + str(now.strftime("%X")) + 'dec'
+        # print(decoder.summary())
+        # print("----------------------------"*10)
         plot_model(decoder, to_file='model/{}.png'.format(model_name), show_shapes=True)
         return decoder
 
 
-# if __name__ == '__main__':
-#
-#     inputs, shape, encoder = encoder_model(input_shape)
-#     decoder = decoder_model(shape)
-#     outputs = decoder(encoder(inputs))
-#
-#     vae = Model(inputs, outputs, name='vae')
-#     print(vae.summary())
+
+if __name__ == '__main__':
+    kernel_size = 3
+    filters = 16
+    latent_dim = 70
+    epochs = 4
+    above_dense = 64
+
+    modelobj = ModelController(latent_dim, filters, kernel_size, above_dense)
+    input_shape = (256, 344, 1)
+    inputs, shape, encoder, z_mean, z_log_var = modelobj.encoder_model(input_shape)
+
+    decoder = modelobj.decoder_model(shape)
+
+    outputs = outputs = decoder(encoder(inputs))
+    vae = Model(inputs, outputs, name='vae')
+
+    vae.summary()
+
