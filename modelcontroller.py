@@ -1,6 +1,6 @@
 import os
 import logging
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, MaxPooling2D, UpSampling2D
 from keras.layers import Conv2D, Flatten, Lambda, Dropout
 from keras.layers import Reshape, Conv2DTranspose
 from keras.models import Model
@@ -8,18 +8,6 @@ from keras.losses import mse
 from keras.utils import plot_model
 from keras import backend as K
 from datetime import datetime
-# import argparse
-# parser = argparse.ArgumentParser()
-# parser.add_argument("-ld", "--latent_dim", type=int)
-# parser.add_argument("-f", "--filters", type=int)
-# parser.add_argument("-k", "--kernel", type=int)
-# parser.add_argument("-ad", "--above_dense", type=int)
-# args = parser.parse_args()
-
-# latent_dim = args.latent_dim
-# filters = args.filters
-# kernel_size = args.kernel
-# above_dense = args.above_dense
 
 logging.getLogger('tensorflow').disabled = True
 
@@ -40,7 +28,7 @@ class ModelController:
 
     def encoder_model(self, input_shape):
         # build encoder model
-        # input_shape = x_train.shape[1:]
+
         inputs = Input(shape=input_shape, name='encoder_input')
         x = inputs
         for i in range(2):
@@ -103,6 +91,25 @@ class ModelController:
         plot_model(decoder, to_file='model/{}.png'.format(model_name), show_shapes=True)
         return decoder
 
+    def deep_autoencoder(self, input_shape):
+        inputs = Input(shape=input_shape, name='encoder_input')
+        conv1 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(inputs)
+        pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
+        conv2 = Conv2D(filters=768, kernel_size=self.kernel_size, activation='relu', padding='same')(pool1)
+        conv3 = Conv2D(filters=1024, kernel_size=self.kernel_size, activation='relu', padding='same')(conv2)
+        pool2 = MaxPooling2D(pool_size=(2, 2))(conv3)
+        conv4 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(pool2)
+
+        #Deocder
+        conv5 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(conv4)
+        up1 = UpSampling2D((2, 2))(conv5)
+        conv6 = Conv2D(filters=1024, kernel_size=self.kernel_size, activation='relu', padding='same')(up1)
+        conv7 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(conv6)
+        up2 = UpSampling2D((2, 2))(conv7)
+        conv8 = Conv2D(filters=256, kernel_size=self.kernel_size, activation='relu', padding='same')(up2)
+        conv9 = Conv2D(filters=64, kernel_size=self.kernel_size, activation='relu', padding='same')(conv8)
+        decodeded = Conv2D(filters=1, kernel_size=self.kernel_size, activation='relu', padding='same')(conv9)
+        return decodeded
 
 
 if __name__ == '__main__':
