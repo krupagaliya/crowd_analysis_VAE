@@ -5,7 +5,7 @@ from os.path import expanduser
 import cv2
 import numpy as np
 import h5py
-from google.colab.patches import cv2_imshow
+
 from matplotlib import pyplot as plt
 from matplotlib import cm as CM
 
@@ -24,6 +24,7 @@ def get_logger(name):
 
 
 def check_io_fromset(ground, h5file):
+    from google.colab.patches import cv2_imshow
     ground = ground * 255.
     img = ground
     cv2_imshow(img)
@@ -39,6 +40,7 @@ def check_dataCorrectiness(x_train, y_train, img_paths):
     :param img_paths: img_paths list
     :return: None
     """
+    from google.colab.patches import cv2_imshow
     count = 0
     randcount = random.randint(1, len(img_paths))
     print(randcount)
@@ -64,8 +66,12 @@ def make_txt(jpg_img_dir, filename, limit=1000):
     file.close()
 
 
-def load_img(path, resizedata =True):
-    img = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
+def load_img(path,RGB,resizedata =True):
+    if RGB:
+        img = cv2.imread(path)
+    else:
+        img = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
+
     if resizedata:
         img = cv2.resize(img, (int(img.shape[1] / 3), int(img.shape[0] / 3)), interpolation=cv2.INTER_CUBIC)
     img = img / 255.0

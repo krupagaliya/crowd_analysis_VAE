@@ -78,12 +78,12 @@ def get_density_map_gaussian(im, points, adaptive_mode=False, fixed_value=15, fi
     return density_map
 
 
-def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
+def gen_x_y(img_paths, train_val_test='train',RGB=False, augmentation_methods=['ori']):
     bar = progressbar.ProgressBar(max_value=len(img_paths))
     bar.start()
     x, y = [], []
     for i in img_paths:
-        x_ = load_img(i)
+        x_ = load_img(i, RGB)
 
         y_ = img_from_h5(i.replace('.jpg', '.h5').replace('images', 'ground'))
         x_, y_ = fix_singular_shape(x_), fix_singular_shape(y_)
@@ -100,13 +100,14 @@ def gen_x_y(img_paths, train_val_test='train', augmentation_methods=['ori']):
 
     x = np.squeeze(x, axis=1)
     y = np.squeeze(y, axis=1)
-    x = np.expand_dims(x, axis=-1)
+    if not RGB:
+        x = np.expand_dims(x, axis=-1)
     bar.finish()
     return x, y, img_paths
 
 
 if __name__ == '__main__':
     paths = read_txt('data/testing.txt')
-    x_train,y_train, img_paths = gen_x_y(paths, augmentation_methods=['flip', 'ori'])
+    x_train,y_train, img_paths = gen_x_y(paths[:10],RGB=False, augmentation_methods=['flip', 'ori'])
     print(x_train.shape)
     print(y_train.shape)
