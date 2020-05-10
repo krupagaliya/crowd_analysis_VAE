@@ -1,6 +1,6 @@
 import os
 import logging
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, MaxPooling2D
 from keras.layers import Conv2D, Flatten, Lambda, Dropout
 from keras.layers import Reshape, Conv2DTranspose
 from keras.models import Model
@@ -8,6 +8,7 @@ from keras.losses import mse
 from keras.utils import plot_model
 from keras import backend as K
 from datetime import datetime
+
 # import argparse
 # parser = argparse.ArgumentParser()
 # parser.add_argument("-ld", "--latent_dim", type=int)
@@ -48,8 +49,8 @@ class ModelController:
             x = Conv2D(filters=self.filters,
                        kernel_size=self.kernel_size,
                        activation='relu',
-                       strides=2,
                        padding='same')(x)
+            x = MaxPooling2D(pool_size=(2, 2))(x)
             # x = Dropout(.2)
 
         # shape info needed to build decoder model
@@ -65,7 +66,7 @@ class ModelController:
         # encoder = Model(inputs, [z_mean, z_log_var, z], name='encoder')
         encoder = Model(inputs, z, name='encoder')
         now = datetime.now()
-        model_name  = str(now.day) + str(now.strftime("%X")) + 'enc'
+        model_name = str(now.day) + str(now.strftime("%X")) + 'enc'
         if not os.path.exists('model'):
             os.mkdir('model')
 
@@ -104,13 +105,12 @@ class ModelController:
         return decoder
 
 
-
 if __name__ == '__main__':
     kernel_size = 3
-    filters = 16
-    latent_dim = 70
+    filters = 64
+    latent_dim = 128
     epochs = 4
-    above_dense = 64
+    above_dense = 512
 
     modelobj = ModelController(latent_dim, filters, kernel_size, above_dense)
     input_shape = (256, 344, 1)
@@ -122,4 +122,3 @@ if __name__ == '__main__':
     vae = Model(inputs, outputs, name='vae')
 
     vae.summary()
-
