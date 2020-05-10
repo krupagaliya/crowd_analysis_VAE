@@ -92,17 +92,16 @@ class ModelController:
         return decoder
 
     def deep_autoencoder(self, input_img):
-
         conv1 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(input_img)
         pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
         conv2 = Conv2D(filters=768, kernel_size=self.kernel_size, activation='relu', padding='same')(pool1)
         conv3 = Conv2D(filters=1024, kernel_size=self.kernel_size, activation='relu', padding='same')(conv2)
         pool2 = MaxPooling2D(pool_size=(2, 2))(conv3)
-        conv4 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(pool2)
+        # conv4 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(pool2)
 
         #Deocder
-        conv5 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(conv4)
-        up1 = UpSampling2D((2, 2))(conv5)
+        # conv5 = Conv2D(filters=2048, kernel_size=self.kernel_size, activation='relu', padding='same')(conv4)
+        up1 = UpSampling2D((2, 2))(pool2)
         conv6 = Conv2D(filters=1024, kernel_size=self.kernel_size, activation='relu', padding='same')(up1)
         conv7 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(conv6)
         up2 = UpSampling2D((2, 2))(conv7)
