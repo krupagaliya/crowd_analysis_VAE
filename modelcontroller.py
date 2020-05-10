@@ -91,9 +91,9 @@ class ModelController:
         plot_model(decoder, to_file='model/{}.png'.format(model_name), show_shapes=True)
         return decoder
 
-    def deep_autoencoder(self, input_shape):
-        inputs = Input(shape=input_shape, name='encoder_input')
-        conv1 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(inputs)
+    def deep_autoencoder(self, input_img):
+
+        conv1 = Conv2D(filters=512, kernel_size=self.kernel_size, activation='relu', padding='same')(input_img)
         pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
         conv2 = Conv2D(filters=768, kernel_size=self.kernel_size, activation='relu', padding='same')(pool1)
         conv3 = Conv2D(filters=1024, kernel_size=self.kernel_size, activation='relu', padding='same')(conv2)
